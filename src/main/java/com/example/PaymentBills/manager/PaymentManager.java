@@ -11,25 +11,31 @@ public class PaymentManager {
     private final PaymentService netBankingService;
     private final PaymentService terminalService;
 
+    // Constructor Injection
     public PaymentManager(
-            PaymentService upiService, // @Primary
+            PaymentService upiService, // @Primary (UPI)
             @Qualifier("netBanking") PaymentService netBankingService,
-            @Qualifier("terminal") PaymentService terminalService
+            @Qualifier("terminalBean") PaymentService terminalService
     ) {
         this.upiService = upiService;
         this.netBankingService = netBankingService;
         this.terminalService = terminalService;
     }
 
+    // Core Logic
     public String processPayment(String type, double amount) {
 
         switch (type.toLowerCase()) {
+
             case "upi":
                 return upiService.pay(amount);
+
             case "netbanking":
                 return netBankingService.pay(amount);
+
             case "terminal":
                 return terminalService.pay(amount);
+
             default:
                 return "Invalid payment type";
         }
